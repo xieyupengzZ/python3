@@ -1,31 +1,45 @@
 '''
+Descripttion: 
+version: 1.0
+Author: xieyupeng
+Date: 2020-08-05 22:24:51
+LastEditors: xieyupeng
+LastEditTime: 2020-08-08 18:54:12
+'''
+import random
+import queue
+from multiprocessing.managers import BaseManager
+'''
 1. Windows下在注册任务队列和结果队列时不支持lambda表达式，需要使用函数代替
 2. 在绑定网络地址时不能为空，可以使用'127.0.0.1'代替空置
 '''
-import random, time, queue
-from multiprocessing.managers import BaseManager
 
-task_queue = queue.Queue()                                  # 发送任务的队列
-result_queue = queue.Queue()                                # 接收结果的队列
+task_queue = queue.Queue()  # 发送任务的队列
+result_queue = queue.Queue()  # 接收结果的队列
+
 
 class QueueManager(BaseManager):
     pass
 
+
 def getTaskQueue():
     return task_queue
 
+
 def getResultQueue():
     return result_queue
+
 
 def doTaskMater():
     # QueueManager.register('get_task_queue', callable=lambda: task_queue)          # 把两个Queue都注册到网络上, callable参数关联了Queue对象:
     # QueueManager.register('get_result_queue', callable=lambda: result_queue)
     QueueManager.register('get_task_queue', callable=getTaskQueue)
     QueueManager.register('get_result_queue', callable=getResultQueue)
-    manager = QueueManager(address=('127.0.0.1', 5000), authkey=b'abc')              # 绑定端口5000, 设置验证码'abc':
-    manager.start()                                                                  # 启动Queue:
+    manager = QueueManager(address=('127.0.0.1', 5000),
+                           authkey=b'abc')  # 绑定端口5000, 设置验证码'abc':
+    manager.start()  # 启动Queue:
 
-    task = manager.get_task_queue()                                                  # 获得通过网络访问的Queue对象:
+    task = manager.get_task_queue()  # 获得通过网络访问的Queue对象:
     result = manager.get_result_queue()
 
     for i in range(10):
@@ -41,6 +55,7 @@ def doTaskMater():
 
     manager.shutdown()
     print('master exit.')
+
 
 if __name__ == '__main__':
     doTaskMater()
