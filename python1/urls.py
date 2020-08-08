@@ -20,12 +20,12 @@ URL与视图函数之间的映射关系
 如果存在多个映射，那么必须在后面加上路径
 '''
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 
 from app1 import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('hello/',views.output), # 只映射某一个路径
-    path('app1/',include('app1.urls')),#把整个app1项目中的映射都添加过来
+    path('app1/', include('app1.urls')),  #把整个app1项目中的映射都添加过来
 ]

@@ -1,5 +1,12 @@
+'''
+Descripttion: 
+version: 1.0
+Author: xieyupeng
+Date: 2020-08-01 18:55:27
+LastEditors: xieyupeng
+LastEditTime: 2020-08-08 19:05:47
+'''
 from django.db import models
-
 '''
     常用字段类型：
     BooleanField:   布尔类型字段
@@ -25,13 +32,14 @@ from django.db import models
     primary_key(True|False)：    一般不需要定义是否为主键，如果没有指明主键的话，django胡自动添加一个默认主键：id=models.AutoField(primary_key=True)
     unique：                     是否唯一（对于数据表而言）
     verbose_name：               字段的详细名称，若不指定该属性，默认使用字段的属性名称
-    
+
 '''
 
+
 class messageQueue(models.Model):
-    ename=models.CharField('英文名',max_length=50) # 默认 null=False 必填
-    cname=models.CharField('中文名',max_length=10,null=True,default='')
-    compan=models.CharField('公司',max_length=50,null=True,default='')
+    ename = models.CharField('英文名', max_length=50)  # 默认 null=False 必填
+    cname = models.CharField('中文名', max_length=10, null=True, default='')
+    compan = models.CharField('公司', max_length=50, null=True, default='')
 
     # 设置扩展属性
     class Meta:
@@ -51,8 +59,8 @@ class messageQueue(models.Model):
 
         # 联合索引
         index_together = [
-            ("ename", "cname"),   # 应为两个存在的字段
+            ("ename", "cname"),  # 应为两个存在的字段
         ]
 
         # 联合唯一索引
-        unique_together = (("ename", "cname"),)   # 应为两个存在的字段
+        unique_together = (("ename", "cname"), )  # 应为两个存在的字段

@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -27,18 +26,16 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',         #管理网站
-    'django.contrib.auth',          #认证模块
+    'django.contrib.admin',  #管理网站
+    'django.contrib.auth',  #认证模块
     'django.contrib.contenttypes',  #内部框架
-    'django.contrib.sessions',      #会话管理
-    'django.contrib.messages',      #消息框架
-    'django.contrib.staticfiles',   #映射的静态资源
-
-    'app1.apps.App1Config'          #加载到全局中
+    'django.contrib.sessions',  #会话管理
+    'django.contrib.messages',  #消息框架
+    'django.contrib.staticfiles',  #映射的静态资源
+    'app1.apps.App1Config'  #加载到全局中
 ]
 
 MIDDLEWARE = [
@@ -57,7 +54,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # 如果指向的是一个html，需要在这里加上html的目录文件夹，BASE_DIR就是当前项目根目录
-        'DIRS': [os.path.join(BASE_DIR, 'templates',BASE_DIR+'/app1/views/')],
+        'DIRS':
+        [os.path.join(BASE_DIR, 'templates', BASE_DIR + '/app1/views/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,7 +70,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'python1.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -80,51 +77,51 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-
-        'ENGINE': 'django.db.backends.mysql',   #mysql数据库驱动
-        'NAME': 'python_test',                  #mysql数据库的名字
-        'USER': 'root',                         #mysql数据库的用户名
-        'PASSWORD': 'xieyupeng',                #mysql数据库的密码
-        'HOST': 'localhost',                    #mysql数据库的主机名
-        'PORT': '3306'                          #mysql数据库的端口号（这个可写可不写）
+        'ENGINE': 'django.db.backends.mysql',  #mysql数据库驱动
+        'NAME': 'python_test',  #mysql数据库的名字
+        'USER': 'root',  #mysql数据库的用户名
+        'PASSWORD': 'xieyupeng',  #mysql数据库的密码
+        'HOST': 'localhost',  #mysql数据库的主机名
+        'PORT': '3306'  #mysql数据库的端口号（这个可写可不写）
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
 # LANGUAGE_CODE = 'en-us'
-LANGUAGE_CODE = 'zh-hans' # 中文
+LANGUAGE_CODE = 'zh-hans'  # 中文
 
 # TIME_ZONE = 'UTC'
-TIME_ZONE = 'Asia/Shanghai' # 时区
+TIME_ZONE = 'Asia/Shanghai'  # 时区
 
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
