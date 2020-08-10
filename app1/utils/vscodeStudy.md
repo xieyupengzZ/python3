@@ -4,7 +4,7 @@
  * @Author: xieyupeng
  * @Date: 2020-08-07 16:53:38
  * @LastEditors: xieyupeng
- * @LastEditTime: 2020-08-10 16:24:43
+ * @LastEditTime: 2020-08-10 20:09:01
 -->
 # 前端开发工具
 - vsCode
@@ -19,6 +19,7 @@
 - 如果直接在工作区打开文件，每次只能打开一个文件夹；工作区右键，把文件夹添加到工作区，就可以添加多个文件夹；
 - debuggerforchrome，在debug界面配置对应项目的launch.json文件，修改端口号；在某个项目文件的编辑页面，按F5自动跳转到浏览器
 - markdown toc 自动生成目录时会乱码， 是因为vscode默认行尾字符是auto，在设置-用户设置页面，搜索eol，修改行尾字符为\n
+- 调试：如果工作空间只有一个项目，只能添加配置在工作空间公共区域；如果有多个项目，可以在每个项目中配置
 
 # vsCode常用快捷键
 - Ctrl+shift+E 项目结构
