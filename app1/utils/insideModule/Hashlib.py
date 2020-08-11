@@ -1,22 +1,20 @@
 '''
 Descripttion: 
-version: 1.0
-Author: xieyupeng
-Date: 2020-08-05 22:24:51
-LastEditors: xieyupeng
-LastEditTime: 2020-08-08 18:52:36
-'''
-import hashlib
-import hmac
-'''
 hashlib提供了常用的摘要算法（单向算法）
 摘要算法：通过摘要函数，对任意长度的数据，计算出固定长度的摘要，可以检测原数据被人篡改
 MD5：固定128bit，通常用 32位 16进制字符串，【1个16进制占4bit】
 SHA1：固定160bit，通常用 40位 16进制字符串，SHA256和SHA512更安全，但是计算更慢
 MD5加盐：防止用户定义一个简单的字符串，MD5编码时默认在原字符串上加一个固定的复杂字符串
+hmac：可以看做MD5加盐的升级版，把盐当做一个秘钥，对原字符串编码，而不是简单的字符串拼接，而且针对所有哈希算法
 
-hmac，可以看做MD5加盐的升级版，把盐当做一个秘钥，对原字符串编码，而不是简单的字符串拼接，而且针对所有哈希算法
+version: 1.0
+Author: xieyupeng
+Date: 2020-08-05 22:24:51
+LastEditors: xieyupeng
+LastEditTime: 2020-08-11 16:42:26
 '''
+import hashlib
+import hmac
 
 md5 = hashlib.md5()
 md5.update('my name is xieyupeng,i is studying python!'.encode('utf-8'))

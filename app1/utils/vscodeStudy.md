@@ -4,7 +4,7 @@
  * @Author: xieyupeng
  * @Date: 2020-08-07 16:53:38
  * @LastEditors: xieyupeng
- * @LastEditTime: 2020-08-10 20:09:01
+ * @LastEditTime: 2020-08-11 10:17:59
 -->
 # 前端开发工具
 - vsCode
@@ -51,7 +51,7 @@
 - 自定义快捷键：
     - Ctrl+D：删除一行
     - 清除markdown快捷键：Ctrl+B
-    - 清楚gitlens快捷键：Ctrl+shift+G G
+    - 清楚gitlens所有快捷键
 
 # typescript
 微软开发和维护的一套编程语言，包含了js所有的元素，扩展了js的语法，加入了类，函数，模块等概念，用于大型项目开发

@@ -4,7 +4,7 @@ version: 1.0
 Author: xieyupeng
 Date: 2020-08-05 22:24:51
 LastEditors: xieyupeng
-LastEditTime: 2020-08-08 18:31:54
+LastEditTime: 2020-08-11 16:39:20
 '''
 import base64
 '''
@@ -16,7 +16,7 @@ url safe : 把 + 和 / 替换成 - 和 _，因为标准Base64编码后的字符 
 '''
 
 print(base64.b64encode(b'xieyupeng&zhangpang'))
-print(base64.b64decode('eGlleXVwZW5nJnpoYW5ncGFuZw=='))
+print(base64.b64decode('eGlleXVwZW5nJnpoYW5ncGFuZw==')) 
 
 print(base64.b64encode(b'i\xb7\x1d\xfb\xef\xff'))
 print(base64.urlsafe_b64encode(b'i\xb7\x1d\xfb\xef\xff'))
