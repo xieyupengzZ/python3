@@ -10,7 +10,10 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "console": "internalConsole"
+            "console": "integratedTerminal"
+            //"console": "internalConsole"      //输出到"调试控制台"，但无法输入数据，只能看到输出
+            //"console": "integratedTerminal"   //输出到软件内置“终端”，可以输入，也可以输出
+            //"console": "externalTerminal"     //输出到外部“终端”
         }
     ]
 }
