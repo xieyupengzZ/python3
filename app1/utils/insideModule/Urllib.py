@@ -1,12 +1,13 @@
 #!/usr/bin/python
 # -*- encoding: utf-8 -*-
 '''
-Descripttion: urllib提供了一系列用于操作URL的功能
+Descripttion: 
+urllib提供了一系列用于操作URL的功能，可以使用第三方模块 request，更方便
 version: 1.0
 Author: xieyupeng
 Date: 2020-08-11 18:12:59
 LastEditors: xieyupeng
-LastEditTime: 2020-08-12 09:40:51
+LastEditTime: 2020-08-13 10:53:49
 '''
 from urllib import request
 from urllib import parse
