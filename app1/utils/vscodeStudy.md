@@ -4,7 +4,7 @@
  * @Author: xieyupeng
  * @Date: 2020-08-07 16:53:38
  * @LastEditors: xieyupeng
- * @LastEditTime: 2020-08-14 11:27:15
+ * @LastEditTime: 2020-08-17 13:28:03
 -->
 # 前端开发工具
 - vsCode
@@ -56,3 +56,15 @@
 
 # typescript
 微软开发和维护的一套编程语言，包含了js所有的元素，扩展了js的语法，加入了类，函数，模块等概念，用于大型项目开发
+
+# vscode整合python环境
+- vscode插件：
+  - python
+- python插件：
+  - 国内镜像：https://mirrors.aliyun.com/pypi/simple/
+  - flake8(代码语法检测)
+  - yapf(代码格式化)
+  - rope(代码重构)
+- vscode配置：
+  - settings.json(python环境配置)
+  - launch.json(python调试配置) 
