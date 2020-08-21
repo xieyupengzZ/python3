@@ -4,11 +4,12 @@
 Descripttion: 收邮件
 协议：POP
 模块：poplib（接受邮件）,email（解析邮件）
+登陆qq邮箱，进入设置-账户，开启SMTP服务，可以得到对应的密码（IMAP/POP3）
 version: 1.0
 Author: xieyupeng
 Date: 2020-08-21 15:29:12
 LastEditors: xieyupeng
-LastEditTime: 2020-08-21 18:01:12
+LastEditTime: 2020-08-21 18:05:18
 '''
 import poplib
 from email.parser import Parser

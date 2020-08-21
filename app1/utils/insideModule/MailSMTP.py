@@ -12,7 +12,7 @@ version: 1.0
 Author: xieyupeng
 Date: 2020-08-20 17:46:02
 LastEditors: xieyupeng
-LastEditTime: 2020-08-21 15:28:26
+LastEditTime: 2020-08-21 18:05:34
 '''
 from email import encoders
 from email.utils import formataddr
