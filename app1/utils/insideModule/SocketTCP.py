@@ -1,14 +1,14 @@
 #!/usr/bin/python
 # -*- encoding: utf-8 -*-
 '''
-Descripttion: TCP编程，Socket编程
+Descripttion: TCP编程，建立可靠连接
 HTTP：必须客户端先给服务端发，服务端才给客户端回；所以是一来一回作为一个批次；
 TCP：全双工，双方都可以向对方发送数据，先后次序根据TCP协议
 version: 1.0
 Author: xieyupeng
 Date: 2020-08-17 10:03:10
 LastEditors: xieyupeng
-LastEditTime: 2020-08-17 16:41:25
+LastEditTime: 2020-08-20 16:15:18
 '''
 
 import socket
@@ -106,5 +106,5 @@ if __name__ == "__main__":
     # 客户端关闭，但是服务端没有关闭，可以一直等待消息
     client1 = multiprocessing.Process(target=localClient)
     client1.start()
-    # 在vscode中开辟的新进程是守护进程（主程序结束就会退出，所以此处需要等待，在idea中不会）
+    # 在vscode中通过 multiprocessing.Process开辟的新进程是守护进程（主程序结束就会退出，所以此处需要等待，在idea中不需要）
     time.sleep(25)
