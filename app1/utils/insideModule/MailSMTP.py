@@ -2,9 +2,10 @@
 # -*- encoding: utf-8 -*-
 '''
 Descripttion: 发邮件
+登陆qq邮箱，进入设置-账户，开启SMTP服务（IMAP/POP3），可以得到对应的密码
 协议：SMTP
 模块：email（构造邮件），smtplib（发送邮件）
-流程：发件人 -> MUA -> MTA -> MTA -> ... -> MDA <- MUA <- 收件人
+流程：发件人 -> MUA -> MTA -> MTA -> MTA -> ... -> MDA <- MUA <- 收件人
 MUA：邮件软件（qq邮箱，google邮箱）
 MTA：邮件传输代理
 MDA：邮件投递代理（服务器）
@@ -12,7 +13,7 @@ version: 1.0
 Author: xieyupeng
 Date: 2020-08-20 17:46:02
 LastEditors: xieyupeng
-LastEditTime: 2020-08-21 18:05:34
+LastEditTime: 2020-08-24 10:15:39
 '''
 from email import encoders
 from email.utils import formataddr
@@ -24,8 +25,8 @@ import smtplib
 '''
 msg: 发送邮件公共方法 
 mail: 邮件对象
-send: 发件人名称
-to: 接收人名称
+send: 发件人名称（邮件中展示的是发件人qq邮箱地址对应的qq昵称）
+to: 接收人名称（邮件中展示的是接收人qq邮箱地址对应的qq昵称）
 title: 邮件标题
 '''
 def sendEmail(mail,send,to,title):
@@ -37,9 +38,9 @@ def sendEmail(mail,send,to,title):
     to_addr = '1107761900@qq.com'
     # SMTP服务器地址:
     smtp_server = 'smtp.qq.com'
-    # 邮件头部-发送者（邮件界面右下角新邮件弹窗时，显示发件人是 send，但是进入邮件后，发件人和接受人都是根据 from_addr和to_addr 展示对应的 qq用户名
+    # 邮件头部-发送者（邮件软件的界面，当有新邮件时，右下角弹窗显示发件人是 send）
     mail['From'] = formataddr((send,from_addr))
-    # 邮件头部-接受者(收件人会展示 to_addr的用户名)
+    # 邮件头部-接受者（发件人和发件人地址组成的元组作为第一个参数）
     mail['To'] = formataddr((to,to_addr))
     # 邮件头部-标题
     mail['Subject'] = Header(title, 'utf-8')
@@ -51,7 +52,7 @@ def sendEmail(mail,send,to,title):
     server.sendmail(from_addr, [to_addr], mail.as_string())
     server.quit()
 
-
+# 发送文本邮件
 def sendTextEmail():
     # 构造邮件内容
     mail = MIMEText(
@@ -61,7 +62,7 @@ def sendTextEmail():
     )
     sendEmail(mail,'python-谢宇鹏','谢宇鹏','python发送的邮件')
 
-
+# 发送附件邮件
 def sendAttachEmail():
 
     # 创建带附件的实例

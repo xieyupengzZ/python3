@@ -3,12 +3,12 @@
 '''
 Descripttion: TCP编程，建立可靠连接
 HTTP：必须客户端先给服务端发，服务端才给客户端回；所以是一来一回作为一个批次；
-TCP：全双工，双方都可以向对方发送数据，先后次序根据TCP协议
+TCP：全双工，双方都可以主动向对方发送数据
 version: 1.0
 Author: xieyupeng
 Date: 2020-08-17 10:03:10
 LastEditors: xieyupeng
-LastEditTime: 2020-08-20 16:15:18
+LastEditTime: 2020-08-24 09:51:50
 '''
 
 import socket
