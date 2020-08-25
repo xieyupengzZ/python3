@@ -1,13 +1,12 @@
-import threading
-import asyncio
-import sys
-import LogTest
-sys.path.append('/app1/utils')
 '''
-记录一个现象，获取日志器时：
+Descripttion: 
+1、引入模块，首先需要有一个包，包下一定要有一个文件 __init__.py，然后就可以引用该包下的模块，即 .py文件
+2、或者在模块搜索路径中加入需要引用的文件的路径
 
-1、都使用LogTest的属性logger，日志打印不会出现问题
-2、都使用LogTest的方法logger1，出现问题：重复打印日志，因为会重复创建日志器（日志器名称是同一个）
+记录一个现象，获取LogTest中的日志器时：
+
+1、如果都使用LogTest的属性logger，日志打印不会出现问题
+2、如果都使用LogTest的方法logger1，会出现问题：重复打印日志，因为会重复创建日志器（日志器名称是同一个）
 3、一个使用方法logger1，一个使用方法logger2，并且两个方法中的日志器名称不同，日志打印不会出现问题
 
 总结: 一个日志类，定义了一个方法，方法里创建一个日志器；
@@ -16,10 +15,17 @@ sys.path.append('/app1/utils')
 解决: 1 - 定义不同的方法，方法中的日志器名称不能相同，每个方法只能调用一次
      2 - 不使用方法，使用全局属性，重复获取该属性，不会导致日志器重复创建
 
-这里是使用代码来实现日志器功能，比较简洁，好维护，缺点就是上面说的，太多调用方式，问题也多
-很多项目还是用xml配置日志功能，就不存在代码那么多种调用方式，配置好了直接引用，问题较少，但是配置文件多了不好维护
+version: 1.0
+Author: xieyupeng
+Date: 2020-08-07 16:47:59
+LastEditors: xieyupeng
+LastEditTime: 2020-08-25 18:39:52
 '''
-
+import threading
+import asyncio
+import sys
+import LogTest
+sys.path.append('/app1/utils')  # 在模块搜索路径中加入 logTest的路径，才能直接引用
 
 @asyncio.coroutine
 def hello():

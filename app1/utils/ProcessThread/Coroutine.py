@@ -1,21 +1,19 @@
 '''
 Descripttion:
+3.4版本引入 asynico，异步操作在 coroutine 中通过 yield from 完成
+执行了 yield from ，无需等待 yield from 返回，切换到另外一个任务继续执行；
+等到 yield from 的返回通知后，再回来继续执行，全程都是一个线程，通过此机制，实现异步IO；
+相比多线程，没有多线程切换的开销，没有多线程的锁机制，所以效率会高出很多；
+一般用 多进程 + 协程 的方式开发
 version: 1.0
 Author: xieyupeng
 Date: 2020-08-05 22:24:51
 LastEditors: xieyupeng
-LastEditTime: 2020-08-08 18:50:33
+LastEditTime: 2020-08-25 18:23:48
 '''
 import threading
 import asyncio
 from aiohttp import web
-'''
-3.4版本引入 asynico
-异步操作在 coroutine 中通过 yield from 完成
-执行了 yield from ，无需等待 yield from 返回，切换到另外一个任务继续执行，等到 yield from 的返回通知后，再回来继续执行。全程都是一个线程。
-通过此机制，实现异步IO
-'''
-
 
 @asyncio.coroutine  # 把一个生成器标记成 coroutine(协程)
 def hello():

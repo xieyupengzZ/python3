@@ -9,14 +9,18 @@ version: 1.0
 Author: xieyupeng
 Date: 2020-08-24 17:41:39
 LastEditors: xieyupeng
-LastEditTime: 2020-08-24 18:35:56
+LastEditTime: 2020-08-25 09:53:51
 '''
 
 import mysql.connector
-from sqlalchemy import Column, String, create_engine,ForeignKey
-from sqlalchemy.orm import sessionmaker,relationship
+from sqlalchemy import Column, String, create_engine
+from sqlalchemy.orm import sessionmaker
+# from sqlalchemy import ForeignKey
+# from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
+
+# mysql原始操作
 def mysqlop():
     
     conn = mysql.connector.connect(user='root',                             
@@ -38,6 +42,8 @@ def mysqlop():
     conn.close()                                                                            # 6 关闭Connection
 
 
+# alchemy ORM框架
+# 将表结构映射到对象
 def mysqlORM():
 
     Base = declarative_base()                                                                       # 创建对象的基类:
@@ -47,21 +53,21 @@ def mysqlORM():
 
         id = Column(String(20), primary_key=True)                                                   # 表的结构:
         name = Column(String(20))
-        teacher = relationship('Teacher')                                                           # 关联teacher表（写的是模型名称）
+        # teacher = relationship('Teacher')                                                           # 关联teacher表（写的是模型名称，注意大小写）
 
     class Teacher(Base):
         __tablename__ = 'teacher'                                                                      
 
         id = Column(String(20), primary_key=True)                                                   
         name = Column(String(20))
-        user_id = Column(String(20), ForeignKey('user.id'))                                         # 一对多，多的那一方，通过外键关联
+        # user_id = Column(String(20), ForeignKey('user.id'))                                         # 创建外键（另一张表要写relationship）
 
     engine = create_engine('mysql+mysqlconnector://root:xieyupeng@localhost:3306/heartbeatnet')     # 初始化数据库连接:
     Base.metadata.create_all(engine)                                                                # 创建表结构
     DBSession = sessionmaker(bind=engine)                                                           # 创建DBSession类型，相当于开启数据库连接
 
     session = DBSession()                                                                           # 创建session对象插入数据
-    new_user = User(id='1', name='xieyupeng')                                                       # 创建新User对象:
+    new_user = User(id='2', name='zhangpang')                                                       # 创建新User对象:
     session.add(new_user)                                                                           # 添加到session:                       
     session.commit()                                                                                # 提交即保存到数据库:
     session.close()                                                                                 # 关闭session:
