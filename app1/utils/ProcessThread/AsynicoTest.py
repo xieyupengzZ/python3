@@ -19,7 +19,7 @@ version: 1.0
 Author: xieyupeng
 Date: 2020-08-07 16:47:59
 LastEditors: xieyupeng
-LastEditTime: 2020-08-25 18:39:52
+LastEditTime: 2020-08-26 13:36:32
 '''
 import threading
 import asyncio
@@ -32,22 +32,18 @@ def hello():
     logger = LogTest.logger1()
     # logger = LogTest.logger
     logger.debug('start....(%s)' % threading.currentThread())
-    print('start....(%s)' % threading.currentThread())
-    yield from asyncio.sleep(2)
+    yield from asyncio.sleep(2)  # 用睡眠模拟执行时长
     logger.debug('end....(%s)' % threading.currentThread())
-    print('end....(%s)' % threading.currentThread())
 
 
 @asyncio.coroutine
 def hello1():
-    logger = LogTest.logger1()
-    # logger = LogTest.logger2()
+    logger = LogTest.logger2()
+    # logger = LogTest.logger1()
     # logger = LogTest.logger
     logger.debug('start1....(%s)' % threading.currentThread())
-    print('start1....(%s)' % threading.currentThread())
     yield from asyncio.sleep(2)
     logger.debug('end1....(%s)' % threading.currentThread())
-    print('end1....(%s)' % threading.currentThread())
 
 
 def main():

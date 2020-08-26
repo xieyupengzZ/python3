@@ -9,41 +9,39 @@ version: 1.0
 Author: xieyupeng
 Date: 2020-08-05 22:24:51
 LastEditors: xieyupeng
-LastEditTime: 2020-08-25 18:23:48
+LastEditTime: 2020-08-26 16:39:44
 '''
 import threading
 import asyncio
 from aiohttp import web
 
-@asyncio.coroutine  # 把一个生成器标记成 coroutine(协程)
+# 把一个生成器标记成 coroutine(协程)
+@asyncio.coroutine  
 def hello():
     print('Hello world! (%s)' % threading.currentThread())
     yield from asyncio.sleep(1)
     print('Hello again! (%s)' % threading.currentThread())
 
-
 @asyncio.coroutine
 def wget(host):
     print('wget %s...' % host)
     connect = asyncio.open_connection(host, 80)
-    reader, writer = yield from connect  # 此处会切换到另一个任务
+    reader, writer = yield from connect  # 此处需要等待响应，会切换到另一个任务
     print('start get %s...' % host)
     header = 'GET / HTTP/1.0\r\nHost: %s\r\n\r\n' % host
     writer.write(header.encode('utf-8'))
-    yield from writer.drain()
+    yield from writer.drain()   # 刷新写缓冲区，如果需要等待，会切换到另一个任务，如果是瞬时完成的，就不会切换到另一任务，看数据量大小
     while True:
-        line = yield from reader.readline()  # while中无法切换出去，只能一直执行到退出
+        print('start read %s...' % host)
+        line = yield from reader.readline()  # 第一次执行此处，如果需要等待，会切换到另一个任务；等待完毕，切换回来时，就一直循环执行，直到全部读完退出才切换到另一个任务
         if line == b'\r\n':  # 请求头和请求体之间是有一个换行的
+            print('------end read %s...' % host)
             break
         print('%s header > %s' % (host, line.decode('utf-8').rstrip()))
     writer.close()
 
 
-'''
-3.5版本引入async/await，用来简化 coroutine 的代码，async 替换 @asyncio.coroutine，await 替换 yield from
-'''
-
-
+# 3.5版本引入async/await，用来简化 coroutine 的代码，async 替换 @asyncio.coroutine，await 替换 yield from
 async def wget2(host):
     print('wget %s...' % host)
     connect = asyncio.open_connection(host, 80)
@@ -51,7 +49,7 @@ async def wget2(host):
     print('get connect %s...' % host)
     header = 'GET / HTTP/1.0\r\nHost: %s\r\n\r\n' % host
     writer.write(header.encode('utf-8'))
-    await writer.drain()
+    await writer.drain()    
     while True:
         line = await reader.readline()  # while中无法切换出去，只能一直执行到退出
         if line == b'\r\n':  # 请求头和请求体之间是有一个换行的
@@ -67,11 +65,7 @@ def main(tasks):
     loop.close()
 
 
-'''
-aiohttp 是基于 asyncio 实现的HTTP框架，http就是一个io操作
-'''
-
-
+# aiohttp 是基于 asyncio 实现的HTTP框架，http就是一个io操作
 async def index(request):
     await asyncio.sleep(0.5)
     return web.Response(body=b'<h1>Index</h1>')
@@ -100,7 +94,7 @@ def main2():
 
 if __name__ == '__main__':
     # tasks1 = [hello(), hello()]
-    # tasks2 = [wget(host) for host in ['www.sina.com.cn', 'www.sohu.com', 'www.163.com']]
+    tasks2 = [wget(host) for host in ['www.sina.com.cn', 'www.sohu.com', 'www.163.com']]
     # tasks3 = [wget2(host) for host in ['www.sina.com.cn', 'www.sohu.com', 'www.163.com']]
-    # main(tasks3)
-    main2()
+    main(tasks2)
+    # main2()
