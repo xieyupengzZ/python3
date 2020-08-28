@@ -9,7 +9,7 @@ version: 1.0
 Author: xieyupeng
 Date: 2020-08-05 22:24:51
 LastEditors: xieyupeng
-LastEditTime: 2020-08-26 16:39:44
+LastEditTime: 2020-08-28 18:06:51
 '''
 import threading
 import asyncio
@@ -22,6 +22,7 @@ def hello():
     yield from asyncio.sleep(1)
     print('Hello again! (%s)' % threading.currentThread())
 
+# 获取不同官网 get请求的响应信息
 @asyncio.coroutine
 def wget(host):
     print('wget %s...' % host)
@@ -70,31 +71,42 @@ async def index(request):
     await asyncio.sleep(0.5)
     return web.Response(body=b'<h1>Index</h1>')
 
-
 async def hello(request):
     await asyncio.sleep(0.5)
     text = '<h1>hello, %s!</h1>' % request.match_info['name']
     return web.Response(body=text.encode('utf-8'))
-
-
+    
+# 下面的方法已经过时，请搜索最新 aiohttp用法
 async def init(loop):
-    app = web.Application(loop=loop)
+    app = web.Application(loop=loop)                                     
     app.router.add_route('GET', '/', index)
     app.router.add_route('GET', '/hello/{name}', hello)
-    srv = await loop.create_server(app.make_handler(), '127.0.0.1', 8000)
+    srv = await loop.create_server(app.make_handler(), '127.0.0.1', 8000) 
     print('Server started at http://127.0.0.1:8000...')
     return srv
-
 
 def main2():
     loop = asyncio.get_event_loop()
     loop.run_until_complete(init(loop))
     loop.run_forever()
 
+#  1、定义URL映射
+routes = web.RouteTableDef()
+@routes.get('/')
+def index(request):
+    return web.Response(body=b'<h1>Awesome App</h1>', content_type='text/html')
+
+# 2、启动服务监听请求
+def init():
+    app = web.Application()
+    app.add_routes([web.get('/', index)])
+    logging.info('server started at http://127.0.0.1:9000...')
+    web.run_app(app, host='127.0.0.1', port=9000)
 
 if __name__ == '__main__':
     # tasks1 = [hello(), hello()]
-    tasks2 = [wget(host) for host in ['www.sina.com.cn', 'www.sohu.com', 'www.163.com']]
+    # tasks2 = [wget(host) for host in ['www.sina.com.cn', 'www.sohu.com', 'www.163.com']]
     # tasks3 = [wget2(host) for host in ['www.sina.com.cn', 'www.sohu.com', 'www.163.com']]
-    main(tasks2)
+    # main(tasks2)
     # main2()
+    init()

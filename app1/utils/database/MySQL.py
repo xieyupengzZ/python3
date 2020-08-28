@@ -4,23 +4,28 @@
 Descripttion: 
 安装 MySQL驱动 pip install mysql-connector-python -i https://mirrors.aliyun.com/pypi/simple/
 安装 ORM框架 pip install sqlalchemy -i https://mirrors.aliyun.com/pypi/simple/
+驱动都比较轻量，直接执行sql字符串，效率都比较高。但是没有整合，代码重复率高。
+ORM底层也是驱动，但是整合了很多方法，使用起来方便且安全，对象和表之间的映射也方便
+
+连接数据库的方法
+1、mysql-connector-python，基本的mysql驱动
+2、sqlalchemy ORM框架
+3、aiomysql，异步io驱动
 
 version: 1.0
 Author: xieyupeng
 Date: 2020-08-24 17:41:39
 LastEditors: xieyupeng
-LastEditTime: 2020-08-25 09:53:51
+LastEditTime: 2020-08-27 17:19:03
 '''
 
 import mysql.connector
 from sqlalchemy import Column, String, create_engine
 from sqlalchemy.orm import sessionmaker
-# from sqlalchemy import ForeignKey
-# from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
 
-# mysql原始操作
+# mysql.connector驱动简单操作，还可以使用连接池
 def mysqlop():
     
     conn = mysql.connector.connect(user='root',                             
@@ -53,14 +58,12 @@ def mysqlORM():
 
         id = Column(String(20), primary_key=True)                                                   # 表的结构:
         name = Column(String(20))
-        # teacher = relationship('Teacher')                                                           # 关联teacher表（写的是模型名称，注意大小写）
 
     class Teacher(Base):
         __tablename__ = 'teacher'                                                                      
 
         id = Column(String(20), primary_key=True)                                                   
         name = Column(String(20))
-        # user_id = Column(String(20), ForeignKey('user.id'))                                         # 创建外键（另一张表要写relationship）
 
     engine = create_engine('mysql+mysqlconnector://root:xieyupeng@localhost:3306/heartbeatnet')     # 初始化数据库连接:
     Base.metadata.create_all(engine)                                                                # 创建表结构
