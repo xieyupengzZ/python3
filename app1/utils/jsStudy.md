@@ -43,3 +43,8 @@
 - 新增的数据类型：iterable，Map，Set
 - Map，set，array 都属于 iterable
 - for...of 用来遍历 iterable，for...in 遍历的是属性，for...of遍历的是值
+## 函数
+- 如果没有 return 语句，默认返回 undefined
+- 关键字 arguments：
+    - 只在函数内部生效，指向函数所有入参，包括函数未接受的参数
+    - 类似array，但不是array，可以通过 length 获取参数个数

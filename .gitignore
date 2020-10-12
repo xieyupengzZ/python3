@@ -6,3 +6,6 @@ app1/utils/__pycache__/LogTest.cpython-37.pyc
 .idea/python3.iml
 .idea/vcs.xml
 .idea/workspace.xml
+app1/utils/database/__pycache__/CreateTableSql.cpython-37.pyc
+.vscode/launch.json
+.vscode/launch.json
