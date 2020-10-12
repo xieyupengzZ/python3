@@ -94,7 +94,7 @@ def xlrdMain():
 
 def excel_xlwt():
 
-    filePath = 'C:\\Users\\Administrator\\Desktop\\python\\文件xlwt.xlsx'
+    filePath = 'C:\\Users\\xieyupeng\\Desktop\\python\\文件xlwt.xlsx'
 
     # 1 创建workbook和worksheet
     workbook = xlwt.Workbook('utf-8')
@@ -154,4 +154,4 @@ def excel_xlwt():
 
 
 if __name__ == '__main__':
-    pass
+    excel_xlwt()
