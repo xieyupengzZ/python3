@@ -1,7 +1,11 @@
 #!/usr/bin/python
 # -*- encoding: utf-8 -*-
-# 针对32位oracle客户端，python32位，cx_oracle插件32位
+# 代码不区分多少位，只有插件才区分，32位Oracle客户端，就用32位的python打包，同理64位
 import cx_Oracle
+import traceback
+import tkinter
+from tkinter import messagebox
+from datetime import datetime as dtime
 
 # 查询
 def getBySql(conn, cursor, sql):
@@ -18,7 +22,7 @@ def getColumns(table,cursor,conn,user):
         from user_tab_cols t
         where t.table_name = \'''' + table + '\' order by t.column_name'
     columns = getBySql(conn, cursor, columnSql)
-    if len(columnSql) == 0:
+    if len(columns) == 0:
         showMsg('error','',*[table,' 没有字段！'])
         return
     tableColumns = []
@@ -182,19 +186,18 @@ def tableSql():
             return
         
         connectstr = configs[0]
-        showMsg('info','',*['数据库连接：',connectstr])
+        writelog('info',*['数据库连接：',connectstr])
         conn = cx_Oracle.connect(connectstr)
         cursor = conn.cursor()
         tables = configs[1].split(',')
-        showMsg('info','',*['表：',configs[1]])
-
+        writelog('info',*['表：',configs[1]])
+        
         for table in tables:
             user = connectstr[0:connectstr.find('/')]
             user = user.upper()
-            print(table)
             startSql = getTableSqlStart(table,user)
             columnSql = getColumns(table,cursor,conn,user)
-            if columnSql == 'None':
+            if columnSql is None:
                 return
             primarySql = getPrimary(table,cursor,conn)
             indexSql = getIndexs(table,cursor,conn)
@@ -202,11 +205,15 @@ def tableSql():
             endSql = getTableSqlEnd(table,user)
             createTableSql = \
                 startSql + columnSql + primarySql + indexSql + grantSql + endSql
-            with open(table + '.txt','w') as f:
+            with open(table + '.sql','w') as f:
                 f.write(createTableSql)
+            writelog('info',*['成功创建脚本：',table,'.sql'])
+        
+        showMsg('info','','程序运行结束，具体信息请查看日志')
 
     except Exception as e:
         showMsg('error','',*['执行异常：',str(e)])
+        showMsg('error','',*['异常信息：',traceback.format_exc()])
         return
     finally:
         cursor.close()
@@ -227,19 +234,31 @@ def getConfig():
 
 # 弹窗信息
 def showMsg(type,title,*msg):
+    writelog(type,*msg)
     title = 'Python自动生成数据库脚本'
-    print(''.join(msg))
-    # if type == 'info':
-    #     messagebox.showinfo(title=title,message=msg)
-    # elif type == 'error':
-    #     messagebox.showerror(title=title,message=msg)
-    # elif type == 'warn':
-    #     messagebox.showwarning(title=title,message=msg)
-    # else:
-    #     messagebox.showinfo(title=title,message=msg)
+    printinfo = ''.join(msg)
+    # tkinter的对话窗口必须要有一个主窗口，就像所有控件都需要放在一个窗口上。
+    # 建立一个隐形窗口后就不会出现那个影响美观的自带窗口了
+    root = tkinter.Tk()
+    root.withdraw()
+    if type == 'info':
+        messagebox.showinfo(title=title,message=printinfo)
+    elif type == 'error':
+        messagebox.showerror(title=title,message=printinfo)
+    elif type == 'warn':
+        messagebox.showwarning(title=title,message=printinfo)
+    else:
+        messagebox.showinfo(title=title,message=printinfo)
+
+# 日志文件
+def writelog(type,*msg):
+    type = '【' + type.upper() + '】'
+    nowtime = '【' + str(dtime.now()) + '】'
+    log = nowtime + type + ''.join(msg) + '\n'
+    with open('log.txt','a') as f:
+        f.write(log)
 
 # 执行入口
 if __name__ == "__main__":
+    writelog('info',*['————————————————————————'])
     tableSql()
-    showMsg('info','','表的创建脚本生成成功！')
-    input("等待输入...")
