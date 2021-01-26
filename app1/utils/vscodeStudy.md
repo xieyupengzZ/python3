@@ -4,7 +4,7 @@
  * @Author: xieyupeng
  * @Date: 2020-08-07 16:53:38
  * @LastEditors: xieyupeng
- * @LastEditTime: 2020-08-27 13:50:25
+ * @LastEditTime: 2021-01-25 19:48:16
 -->
 # 前端开发工具
 - vsCode
@@ -34,6 +34,8 @@
 - Ctrl+j：控制台隐藏展示
 - F2：重名名，所有用到的地方都会修改
 - F3：查找，但是光标还在编辑器内，可以直接编辑，巧妙方便
+- F5：Debug
+- Ctrl + F5: Run
 - F12：打开引用链，只限当前文件
 - Ctrl+\:新增一个编辑器，并把当前文件复制一份
 - Ctrl+1/2：在两个编辑器之间切换
@@ -60,8 +62,10 @@
 # vscode整合python环境
 - vscode插件：
   - python
+  - 直接用python命令执行脚本：python xxx.py
 - python插件：
   - 国内镜像：https://mirrors.aliyun.com/pypi/simple/
+  - pip安装时使用镜像：pip install -i https://mirrors.aliyun.com/pypi/simple/ cx_oracle
   - flake8(代码语法检测)
   - yapf(代码格式化)
   - rope(代码重构)

@@ -6,7 +6,7 @@ Descripttion: 操作oracle数据库
 2、数据库连接驱动，都依赖于本地的数据库客户端，所以必须先安装对应的数据库客户端
 3、Oracle客户端的位数和pl/sql的位数是对应的（32和64）
 4、32位的客户端，就用32位的python运行和打包，同理64位
-5、进入阿里云镜像地址：https://mirrors.aliyun.com/pypi/simple/，选择cx_oracle包32位的whl文件下载
+5、除了pip安装，也可以进入阿里云镜像地址：https://mirrors.aliyun.com/pypi/simple/，选择cx_oracle包32位的whl文件下载
 6、先安装 pip install wheel，再通过 pip install xxx.whl 的方式安装
 7、如果64位的python不能安装32位的包，需要在本地再安装一个32位的python，不冲突（系统变量只配置一个就行，另一个通过进入对应安装目录来使用）
 8、在对应python目录下和pip目录下，优先使用该python和pip，系统变量只是为了方便在任何目录下调用程序
