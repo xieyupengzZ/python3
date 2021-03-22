@@ -20,7 +20,7 @@ def getColumns(table,cursor,conn,user):
     columnSql = '''select 
         t.column_name,t.data_type,t.data_length,t.data_precision,t.data_scale,t.nullable,t.data_default
         from user_tab_cols t
-        where t.table_name = \'''' + table + '\' order by t.column_name'
+        where t.COLUMN_ID is not null and t.table_name = upper(\'''' + table + '\') order by t.COLUMN_ID'
     columns = getBySql(conn, cursor, columnSql)
     if len(columns) == 0:
         showMsg('error','',*[table,' 没有字段！'])
@@ -29,7 +29,7 @@ def getColumns(table,cursor,conn,user):
     for column in columns:
         tableColumns.append(getColumnStr(column))
     columnStr = ',\n'.join(tableColumns)
-    createTableStr = 'create table ' + table + '\n(\n' + columnStr + '\n);\n'
+    createTableStr = 'create table '+ user + '.' + table + '\n(\n' + columnStr + '\n);\n'
     return createTableStr
 
 # 主键
@@ -97,6 +97,35 @@ def getGrants(table,cursor,conn):
         grantStr = '\n grant ' + operation + ' on ' + table + ' to ' + target + grantSuffix
         grantStrs.append(grantStr)
     return ''.join(grantStrs)
+
+# 注释
+def getComments(table,cursor,conn,user):
+    commentSuffix = ';'
+    commentStrs = []
+    
+    # 表名注释
+    commmentTabSql = 'SELECT t.COMMENTS FROM USER_TAB_COMMENTS t where table_name = \'' + table + '\''
+    tabComments = getBySql(conn,cursor,commmentTabSql)
+    if len(tabComments) == 0:
+        return ''
+    tabComment = ''
+    for comment in tabComments:
+        if comment[0] is None:
+            continue
+        tabComment = '\n comment on table ' + user + '.' + table + ' is \'' + comment[0] + '\'' + commentSuffix
+    commentStrs.append(tabComment)
+
+    # 字段注释
+    commentSql = 'SELECT t.COLUMN_NAME,t.COMMENTS FROM  USER_COL_COMMENTS t where table_name = \'' + table + '\''
+    comments = getBySql(conn,cursor,commentSql)
+    if len(comments) == 0:
+        return ''
+    for comment in comments:
+        if comment[1] is None:
+            continue
+        colComment = '\n comment on column ' + table + '.' + comment[0] + ' is \'' + comment[1] + '\'' + commentSuffix
+        commentStrs.append(colComment)
+    return ''.join(commentStrs) + '\n'
 
 # 字段类型分类如下：
 '''
@@ -202,14 +231,15 @@ def tableSql():
             primarySql = getPrimary(table,cursor,conn)
             indexSql = getIndexs(table,cursor,conn)
             grantSql = getGrants(table,cursor,conn)
+            commentSql = getComments(table,cursor,conn,user)
             endSql = getTableSqlEnd(table,user)
             createTableSql = \
-                startSql + columnSql + primarySql + indexSql + grantSql + endSql
-            with open(table + '.sql','w') as f:
+                startSql + columnSql + commentSql + primarySql + indexSql + grantSql + endSql
+            with open(table + '.tab','w') as f:
                 f.write(createTableSql)
-            writelog('info',*['成功创建脚本：',table,'.sql'])
+            writelog('info',*['成功创建脚本：',table,'.tab'])
         
-        showMsg('info','','程序运行结束，具体信息请查看日志')
+        showMsg('info','','脚本已全部生成！')
 
     except Exception as e:
         showMsg('error','',*['执行异常：',str(e)])
@@ -241,6 +271,7 @@ def showMsg(type,title,*msg):
     # 建立一个隐形窗口后就不会出现那个影响美观的自带窗口了
     root = tkinter.Tk()
     root.withdraw()
+    # messagebox 会引起阻塞，直到弹出框的被点击确定或关闭后
     if type == 'info':
         messagebox.showinfo(title=title,message=printinfo)
     elif type == 'error':

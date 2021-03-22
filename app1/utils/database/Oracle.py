@@ -26,7 +26,7 @@ def oracleOp(table,cursor,conn):
     columnSql = '''select 
         t.column_name,t.data_type,t.data_length,t.data_precision,t.data_scale,t.nullable,t.data_default
         from user_tab_cols t
-        where t.table_name = \'''' + table + '\' order by t.column_name'
+        where t.table_name = upper(\'''' + table + '\') order by t.COLUMN_ID'
     columns = getBySql(conn, cursor, columnSql)
     tableColumns = []
     for column in columns:
