@@ -220,7 +220,9 @@ def tableSql():
         cursor = conn.cursor()
         tables = configs[1].split(',')
         writelog('info',*['表：',configs[1]])
-        
+        isComment = configs[2].upper()
+        isNameUpper = configs[3].upper()
+
         for table in tables:
             user = connectstr[0:connectstr.find('/')]
             user = user.upper()
@@ -231,10 +233,16 @@ def tableSql():
             primarySql = getPrimary(table,cursor,conn)
             indexSql = getIndexs(table,cursor,conn)
             grantSql = getGrants(table,cursor,conn)
-            commentSql = getComments(table,cursor,conn,user)
+            commentSql = ''
+            if isComment == 'TRUE':
+                commentSql = getComments(table,cursor,conn,user)
             endSql = getTableSqlEnd(table,user)
             createTableSql = \
                 startSql + columnSql + commentSql + primarySql + indexSql + grantSql + endSql
+
+            table = table.lower()
+            if isNameUpper == 'TRUE':
+                table = table.upper()
             with open(table + '.tab','w') as f:
                 f.write(createTableSql)
             writelog('info',*['成功创建脚本：',table,'.tab'])
@@ -250,7 +258,7 @@ def tableSql():
         conn.close()
 
 # 获取配置信息
-# 第一行是连接，第二行是要导出的表（以逗号分隔）
+# 第一行是连接，第二行是要导出的表（以逗号分隔），第三行是否导出表注释
 def getConfig():
     configs = []
     with open('config.txt','r') as f:
