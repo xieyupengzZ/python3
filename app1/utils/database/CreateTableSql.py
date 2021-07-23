@@ -156,9 +156,8 @@ def getColumnStr(column):
     cnull = column[5]  # 是否为空
     cdefault = str(column[6])  # 默认值
 
-    ctypes = ''
     if ctype in type1 or type4(ctype):
-        ctypes = ctype
+        ctype = ctype
     elif ctype in type2:
         ctype = ctype + '(' + str(clength) + ')'
     elif ctype in type5:
