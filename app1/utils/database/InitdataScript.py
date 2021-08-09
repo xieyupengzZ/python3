@@ -21,7 +21,7 @@ def getDataBySql(conn, cursor, sql):
 # 获取配置信息，第一行是数据库连接
 def getConfig():
     configs = []
-    with open('config.txt',encoding='utf-8',mode='r') as f:
+    with open('id_config.txt',encoding='utf-8',mode='r') as f:
         for config in f.readlines():
             config = config.strip()
             config = config.replace('\n','').replace('\r','')

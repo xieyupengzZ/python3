@@ -260,7 +260,7 @@ def tableSql():
 # 第一行是连接，第二行是要导出的表（以逗号分隔），第三行是否导出表注释
 def getConfig():
     configs = []
-    with open('config.txt','r') as f:
+    with open('ct_config.txt','r') as f:
         for config in f.readlines():
             config = config.strip()
             config = config.replace('\n','').replace('\r','')
@@ -293,6 +293,7 @@ def writelog(type,*msg):
     type = '【' + type.upper() + '】'
     nowtime = '【' + str(dtime.now()) + '】'
     log = nowtime + type + ''.join(msg) + '\n'
+    print(log)
     with open('log.txt','a') as f:
         f.write(log)
 
