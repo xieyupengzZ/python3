@@ -294,7 +294,7 @@ def writelog(type,*msg):
     nowtime = '【' + str(dtime.now()) + '】'
     log = nowtime + type + ''.join(msg) + '\n'
     print(log)
-    with open('log.txt','a') as f:
+    with open('ct_log.txt','a') as f:
         f.write(log)
 
 # 执行入口

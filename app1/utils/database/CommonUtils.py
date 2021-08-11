@@ -10,8 +10,8 @@ from tkinter import messagebox
 # tkinter的对话窗口必须要有一个主窗口，就像所有控件都需要放在一个窗口上
 # 建立一个隐形窗口后就不会出现那个影响美观的自带窗口了
 # messagebox 会引起阻塞，直到弹出框的被点击确定或关闭后
-def showMsg(type,title,*msg):
-    writelog(type,*msg)
+def showMsg(type,logfile,title,*msg):
+    writelog(type,logfile,*msg)
     title = 'Python自动生成数据库脚本'
     printinfo = ''.join(msg)
     root = tkinter.Tk()
@@ -26,10 +26,10 @@ def showMsg(type,title,*msg):
         messagebox.showinfo(title=title,message=printinfo)
 
 # 日志文件
-def writelog(type,*msg):
+def writelog(type,logfile,*msg):
     type = '【' + type.upper() + '】'
     nowtime = '【' + str(dtime.now()) + '】'
     log = nowtime + type + ''.join(msg) + '\n'
     print(log)
-    with open('log.txt','a') as f:
+    with open(logfile,'a') as f:
         f.write(log)

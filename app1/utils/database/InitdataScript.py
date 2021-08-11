@@ -4,7 +4,6 @@
 import cx_Oracle
 import traceback
 import CommonUtils
-import datetime
 import re
 
 outputstr = {}
@@ -35,11 +34,11 @@ def initdataSql():
     try:
         configs = getConfig()
         if len(configs) == 0:
-            CommonUtils.showMsg('error', '配置文件为空！')
+            CommonUtils.showMsg('error','id_log.txt','配置文件为空！')
             return
 
         connectstr = configs[0]
-        CommonUtils.writelog('info', *['数据库连接：', connectstr])
+        CommonUtils.writelog('info','id_log.txt', *['数据库连接：', connectstr])
         conn = cx_Oracle.connect(connectstr)
         cursor = conn.cursor()
         user = connectstr[0:connectstr.find('/')].lower()
@@ -58,17 +57,17 @@ def initdataSql():
             elif type == 'delete':
                 deleteSql(sqlstr,user)
             else :
-                CommonUtils.showMsg('warn', '', *['只支持select/update/delete，不支持语句：【', sqlstr, '】'])
+                CommonUtils.showMsg('warn', 'id_log.txt','', *['只支持select/update/delete，不支持语句：【', sqlstr, '】'])
                 return
         for table,sql in outputstr.items():
             with open(table + '.sql','w') as f:
                 f.write(sql)
-                CommonUtils.writelog('info',*['成功创建脚本：',table,'.sql'])
-        CommonUtils.showMsg('info', '', '脚本已全部生成！')
+                CommonUtils.writelog('info','id_log.txt',*['成功创建脚本：',table,'.sql'])
+        CommonUtils.showMsg('info','id_log.txt', '', '脚本已全部生成！')
 
     except Exception as e:
-        CommonUtils.showMsg('error','',*['执行异常：',str(e)])
-        CommonUtils.showMsg('error','',*['异常信息：',traceback.format_exc()])
+        CommonUtils.showMsg('error','id_log.txt','',*['执行异常：',str(e)])
+        CommonUtils.showMsg('error','id_log.txt','',*['异常信息：',traceback.format_exc()])
         return
     finally:
         cursor.close()
@@ -89,7 +88,7 @@ def selectSql(sqlstr,conn,cursor,user):
 
     fromindex = sqlstr.find('from')
     if fromindex == -1:
-        CommonUtils.showMsg('warn', '', *['找不到from关键字，不支持语句：【', sqlstr, '】'])
+        CommonUtils.showMsg('warn','id_log.txt', '', *['找不到from关键字，不支持语句：【', sqlstr, '】'])
         return
 
     whereindex = sqlstr.find('where')
@@ -105,7 +104,7 @@ def selectSql(sqlstr,conn,cursor,user):
     else:
         tablestr = tablestr.split(".")[1]
     if fromstr.find(',') != -1 or fromstr.find('join') != -1:
-        CommonUtils.showMsg('warn','',*['只支持单表查询，不支持语句：【', sqlstr, '】'])
+        CommonUtils.showMsg('warn','id_log.txt','',*['只支持单表查询，不支持语句：【', sqlstr, '】'])
         return
 
     selectindex = sqlstr.find('select') + 6
@@ -122,7 +121,7 @@ def selectSql(sqlstr,conn,cursor,user):
     deletestr = '\ndelete ' + fromstr + wherestr + ';\n'
     datas = getDataBySql(conn, cursor, sqlstr)
     if len(datas) == 0:
-        CommonUtils.showMsg('error', '', *['数据为空：【', sqlstr, '】'])
+        CommonUtils.showMsg('error','id_log.txt', '', *['数据为空：【', sqlstr, '】'])
         return
     insertarray = []
     for data in datas:
@@ -161,7 +160,7 @@ def updateSql(sqlstr,user):
     updateindex = sqlstr.find('update') + 6
     setindex = sqlstr.find('set')
     if setindex == -1:
-        CommonUtils.showMsg('warn', '', *['找不到set关键字，不支持语句：【', sqlstr, '】'])
+        CommonUtils.showMsg('warn','id_log.txt', '', *['找不到set关键字，不支持语句：【', sqlstr, '】'])
         return
     tablestr = sqlstr[updateindex:setindex].strip()
     tablestr = tablestr.split(' ')[0]
@@ -181,7 +180,7 @@ def deleteSql(sqlstr,user):
     fromindex = sqlstr.find('from') + 4
     whereindex = sqlstr.find('where')
     if fromindex == -1:
-        CommonUtils.showMsg('warn', '', *['找不到from关键字，不支持语句：【', sqlstr, '】'])
+        CommonUtils.showMsg('warn','id_log.txt', '', *['找不到from关键字，不支持语句：【', sqlstr, '】'])
         return
     tablestr = sqlstr[fromindex:whereindex].strip()
     tablestr = tablestr.split(' ')[0]
@@ -204,7 +203,7 @@ def getColumns(table,cursor,conn):
         where t.COLUMN_ID is not null and t.table_name = upper(\'''' + table + '\') order by t.COLUMN_ID'
     columns = getDataBySql(conn, cursor, columnSql)
     if len(columns) == 0:
-        CommonUtils.showMsg('error','',*[table,' 没有字段！'])
+        CommonUtils.showMsg('error','id_log.txt','',*[table,' 没有字段！'])
         return
     columntype = {}
     columnstr = []
@@ -217,7 +216,7 @@ def getColumns(table,cursor,conn):
 
 # 执行入口
 if __name__ == "__main__":
-    CommonUtils.writelog('info',*['————————————————————————'])
+    CommonUtils.writelog('info','id_log.txt',*['————————————————————————'])
     initdataSql()
 
 
