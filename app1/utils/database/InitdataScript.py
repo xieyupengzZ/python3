@@ -29,7 +29,6 @@ def getConfig():
             configs.append(config)
     return configs
 
-
 def initdataSql():
     try:
         configs = getConfig()
@@ -47,10 +46,27 @@ def initdataSql():
         for i,sqlstr in enumerate(configs):
             if i == 0:
                 continue
-            sqlstr = compliestr.sub(' ',sqlstr).strip().lower()
-            sqlstr = sqlstr.replace(',t.rowid','').replace('t.rowid,','')
-            type = sqlstr.split(' ')[0]
+            sqlstr = compliestr.sub(' ',sqlstr).strip()
+            type = sqlstr.split(' ')[0].lower()
+
             if type == 'select':
+                # 把sql语句小写化，注意不要修改条件sql的大小写，因为查询条件是区分大小写的
+                whereindex = CommonUtils.searchStr(sqlstr,' where ',re.I)
+                if whereindex != -1:
+                    whereindex = whereindex + 6
+                    beforeWhere = sqlstr[0:whereindex].lower()
+                    sqlstr = beforeWhere + sqlstr[whereindex:]
+                else:
+                    # 没有where条件的情况
+                    fromindex = CommonUtils.searchStr(sqlstr,' from ',re.I)
+                    if fromindex == -1:
+                        CommonUtils.showMsg('warn','id_log.txt', '', *['找不到from关键字：【', sqlstr, '】'])
+                        return
+                    fromindex = fromindex + 6
+                    beforeFrom = sqlstr[0:fromindex].lower()
+                    sqlstr = beforeFrom + sqlstr[fromindex:]
+
+                sqlstr = sqlstr.replace(',t.rowid', '').replace('t.rowid,', '')
                 selectSql(sqlstr,conn,cursor,user)
             elif type == 'update':
                 updateSql(sqlstr,user)
@@ -86,19 +102,19 @@ def selectSql(sqlstr,conn,cursor,user):
             namevalue = value.split('=')
             defaultvalue[namevalue[0].upper()] = namevalue[1]
 
-    fromindex = sqlstr.find('from')
+    fromindex = CommonUtils.searchStr(sqlstr,' from ',re.I)
     if fromindex == -1:
         CommonUtils.showMsg('warn','id_log.txt', '', *['找不到from关键字，不支持语句：【', sqlstr, '】'])
         return
-
-    whereindex = sqlstr.find('where')
+    whereindex = CommonUtils.searchStr(sqlstr,' where ',re.I)
     if whereindex == -1:
         whereindex = len(sqlstr) + 1
-    fromstr = sqlstr[fromindex:whereindex]
+    fromstr = sqlstr[fromindex:whereindex].strip()
     tablestr = fromstr.split(' ')[1].strip()
     tableRename = fromstr.split(' ')[2].strip()
     usertable = tablestr
-    if tablestr.find(user) == -1:
+    userindex = CommonUtils.searchStr(tablestr, user, re.I)
+    if userindex == -1:
         usertable = user + '.' + tablestr
         fromstr = fromstr.replace(tablestr,usertable)
     else:
@@ -157,16 +173,17 @@ def selectSql(sqlstr,conn,cursor,user):
 
 
 def updateSql(sqlstr,user):
-    updateindex = sqlstr.find('update') + 6
-    setindex = sqlstr.find('set')
+    updateindex = CommonUtils.searchStr(sqlstr,'update ',re.I) + 6
+    setindex = CommonUtils.searchStr(sqlstr,' set ',re.I)
     if setindex == -1:
         CommonUtils.showMsg('warn','id_log.txt', '', *['找不到set关键字，不支持语句：【', sqlstr, '】'])
         return
     tablestr = sqlstr[updateindex:setindex].strip()
     tablestr = tablestr.split(' ')[0]
-    if tablestr.find(user) == -1:
+    userindex = CommonUtils.searchStr(tablestr,user,re.I)
+    if userindex == -1:
         usertable = user + '.' + tablestr
-        sqlstr.replace(tablestr,usertable)
+        sqlstr = sqlstr.replace(tablestr,usertable)
     else:
         tablestr = tablestr.split('.')[1]
     updatestr = '\n' + sqlstr + ';\n\n' + 'commit;' + '\n'
@@ -175,18 +192,22 @@ def updateSql(sqlstr,user):
     else:
         outputstr[tablestr] = updatestr
 
-
 def deleteSql(sqlstr,user):
-    fromindex = sqlstr.find('from') + 4
-    whereindex = sqlstr.find('where')
+    fromindex = CommonUtils.searchStr(sqlstr,' from ',re.I)
     if fromindex == -1:
-        CommonUtils.showMsg('warn','id_log.txt', '', *['找不到from关键字，不支持语句：【', sqlstr, '】'])
+        CommonUtils.showMsg('warn', 'id_log.txt', '', *['找不到from关键字，不支持语句：【', sqlstr, '】'])
+        return
+    fromindex = fromindex + 5
+    whereindex = CommonUtils.searchStr(sqlstr,' where ',re.I)
+    if fromindex == -1:
+        CommonUtils.showMsg('warn', 'id_log.txt', '', *['找不到where关键字，不支持语句：【', sqlstr, '】'])
         return
     tablestr = sqlstr[fromindex:whereindex].strip()
     tablestr = tablestr.split(' ')[0]
-    if tablestr.find(user) == -1:
+    userindex = CommonUtils.searchStr(tablestr,user,re.I)
+    if userindex == -1:
         usertable = user + '.' + tablestr
-        sqlstr.replace(tablestr,usertable)
+        sqlstr = sqlstr.replace(tablestr,usertable)
     else:
         tablestr = tablestr.split('.')[1]
     deletestr = '\n' + sqlstr + ';\n\n' + 'commit;' + '\n'
@@ -218,6 +239,8 @@ def getColumns(table,cursor,conn):
 if __name__ == "__main__":
     CommonUtils.writelog('info','id_log.txt',*['————————————————————————'])
     initdataSql()
-
+    # sqlstr = 'select t.* FROM kdbase.upm_dict_items t';
+    # fromSearch = re.search(' from ', sqlstr, flags=re.I)
+    # print(fromSearch)
 
 

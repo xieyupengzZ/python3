@@ -5,6 +5,7 @@ __author__ = 'xieyupeng' # 作者
 import tkinter
 from datetime import datetime as dtime
 from tkinter import messagebox
+import re
 
 # 弹窗信息
 # tkinter的对话窗口必须要有一个主窗口，就像所有控件都需要放在一个窗口上
@@ -33,3 +34,12 @@ def writelog(type,logfile,*msg):
     print(log)
     with open(logfile,'a') as f:
         f.write(log)
+
+# 查找字符串
+# flags = re.I 不区分大小写
+def searchStr(fromstr,str,flags):
+    search = re.search(str, fromstr, flags=flags)
+    index = -1
+    if search is not None:
+        index = search.span()[0]
+    return index
